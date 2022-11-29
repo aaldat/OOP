@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Gestione Biblioteca</title>
+<link href=".css.css" rel="stylesheet" type="text/css">
+<style>
+@media print {  /* adjusted to print the html to a single-page pdf */
+body {
+	font-size: 10pt;
+}
+</style>
+</head>
+<body>
+
+<h1>Gestione Biblioteca</h1>
+
+Sviluppare un programma che simuli la gestione di una biblioteca. Tutte le classi si trovano nel package <i>libraryMgmt</i>.
+La classe principale è <b>LibraryMgmt</b>. La classe <b>TestApp</b> nel package <i>example</i> contiene esempi e include
+i principali casi di test, ma non tutti. Le eccezioni sono lanciate tramite la classe <b>LMException</b>;
+solo i controlli espressamente menzionati sono da effetture e non tutti quelli possibili.
+Se un metodo lancia un'eccezione non viene fatta alcuna modifica dei dati. 
+
+La documentazione JDK è accessibile alla URL 
+<a href="https://oop.polito.it/api/" class="uri">https://oop.polito.it/api/</a>.
+</p>
+
+
+<h2>R0: Date </h2>
+
+Il metodo <b>void setCurrentDate (LocalDate date)</b> è chiamato una soloa volta per 
+definire la data corrente.
+</p>
+Il metodo <b>LocalDate getCurrentDate ()</b> restituisce la data corrente.
+</p>
+Il metodo <b>void addDays (long nOfDays)</b> fa avanzare la data corrente del numero specificato di giorni.
+</p>
+
+<ul class="hint">
+<li>La classe <i>LocalDate</i> offre il metodo <i>plusDays()</i> che restituisce
+una nuova data incrementeata del numero specifico di giorni.</li>
+</ul> 
+
+<h2>R1: Linri e utenti</h2>
+
+La biblioteca può contenere diverse copie (volumi) dello stesso libro.
+
+Il metodo <b> String addBook (String title, int nVolumes, String... authors) </b> 
+inserisce un libro ed i corrispondenti volumi. Un libro ha un titolo ed una lista di nomi di autori.
+Ogni volume ha un indice univoco intero e progressivo che parte da 1.
+Il risultato mostra l'intervallo di indici dei volumi inseriti;
+l'intervallo consiste nell'indice minore ed in quello massimo separati da un <i>':'</i>.
+Il metodo lancia un'eccezione se il titolo è duplicato.
+</p>
+I volumi sono tutti inizialmente disponibili; quando un volume è dato in prestito diventa
+non disponibile e quando viene restituito diventa nuovamente disponibile.
+</p>
+
+<p>
+Il metodo  <b> String addUser (String name, int maxNofBooks, int duration) </b> 
+inserisce un uovo utente, il numero massimo di libri che può noleggiare contemporaneamente,
+e la durata (massima) in giorni del prestito.
+Il risultato mostra il nome, il numero massimo di libri e la durata separati da duepunti (<i>':'</i>).
+Il metodo lancia un'eccezione se l'utente è ripetuto.
+
+</p>
+
+<h2>R2: Prestiti</h2>
+<p>
+(<i>':'</i>) <b>int addLoan (String user, String title) </b> 
+predispone un prestito per l'utente ed il titolo specificati.
+Il prestito registra l'indice del volume, la data prevista di restituzione
+(pari alla data corrente più il numero massimo di giorni di prestito per quell'utente)
+e la data di restituzione che inizialmente è mancante.
+
+Il volume appartiene al libro indicato tramite il titolo ed è quello con l'indice più 
+basso tra quelli disponibili.
+Ogni prestito ha un indice intero unico progressivo a partire da 1.
+il risultato è l'indice del prestito.
+<br>
+Il metodo lancia un'eccezione in tre casi:
+l'utente ha già il numero massimo di prestiti in corso (ovvero non ancora restituiti),
+l'utente è in ritardo rispetto alla data di restituzione per qualche volume,
+(ovvero un prestito non ancora restituito ha una data prevista di restitutzione successiva alla data corrente),
+non ci sono volumi disponibili per quel libro.
+</p>
+
+<p>
+Il metodo <b>LocalDate closeLoan (int loanIndex)</b> 
+registra la restituzione del prestito corrispondente all'indice dato.
+Registra la data di restituzione uguale alla data corrente e rende il volume nuovamente disponibile.
+Il numero di libri attualmente in prestito per l'utente viene decrementato di uno.
+Il metodo restituisce la data di restituzione.  
+</p>
+
+<p>
+Il metodo <b>String getLoanInfo (int loanIndex)</b> restituisce le informazioni sul prestito indicato.
+L'informazione è una stringa fatta di 5 elementi separati da duepunti: 
+il nome utente, l'indice del prestito, l'indice del volume, la data di restituzione presunta e lo stato.
+<p>
+Lo stato può assumere tre valori:
+<i>ongoing</i> quando il prestito non è ancora stato restituito (manca la data di restituzione)
+e la data presunta di restituzione non è successiva alla data corrente;
+<i>overdue</i> quando il prestito non è ancora stato restituito
+e la data presunta di restituzione è precedente alla data corrente;
+<i>closed</i> quando il prestito è stato restituito (è presente la data di restituzione)
+</p>
+
+
+Il metodo <b>int numberOfBooks (String userName)</b> 
+retistuisce il numero di volumi in prestito ad un dato utente
+(ovvero prestiti il cui stato è ongoing oppure overdue)
+</p>
+
+<h2>R3: Statistics </h2>
+
+Il metodo <b> authorsByTitle()</b> 
+raggruppa gli autori per titolo.
+Le chiavi sono i titoli dei libri ordinati alfabeticamente,
+le lsita di autori sono anch'esse ordinata alfabeticamente.
+</p>
+
+<p>
+Il metodo <b>numberOfTotalLoansByUser()</b> 
+fornisce il numero totale di prestiti (inclusi quelli restituiti)
+per ogni utente.
+Le chiavi sono i nomi degli utenti ordinati alfabeticamente.
+Gli utenti che non hanno mai fatto prestiti sono ignorati.
+</p>
+
+<h2>R4: Interrogazioni </h2>
+
+<p>
+Il metodo <b> dailyOverdue()</b> restituisce la lista dei prestiti non restituiti la cui data
+presunta di restituzione è uguale alla data corrente.
+<p>
+Il metodo <b>long availableVolumes(String title)</b> 
+restituisce il numero di volumi disponibili per il linro col titolo dato.
+
+<p>
+Il metodo <b>double averageDelay(String userName)</b> 
+restituisce il ritardo medio nella restituzione dei prestiti.
+Il ritardo è il  numero di giorni trascorso tra la data presunta e la data effettiva di restituzione,
+considerando il ritardo di tutti i presitit restituiti prima della data prevista pari a zero.
+Solo i prestiti restituiti sono contati.
+
+
+<ul class="hint">
+<li>Il metodo <i>until()</i> in class <i>LocalDate</i> 
+può essere usato per calcolare la differenza tra due date, 
+es. <i>firstDate.until(lastDate,ChronoUnit.DAYS);</i>.
+</ul>
+</body>
+</html>

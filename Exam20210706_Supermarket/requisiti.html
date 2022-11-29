@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+
+
+
+<title>Supermarket</title>
+<link href=".css.css" rel="stylesheet" type="text/css">
+<style>
+@media print {  /* adjusted to print the html to a single-page pdf */
+body {
+	font-size: 10pt;
+}
+</style>
+</head>
+<body>
+
+
+<h1>Supermarket</h1>
+Il programma simula la gestione di un supermarket.
+<br>
+Tutte le classi si trovano nel package <b>supermarket</b>. 
+La classe principale è <b>Supermarket</b>. 
+La classe <i>TestApp</i> nel package <i>example</i> contiene esempi e presenta i principali casi di test ma non tutti. Si consiglia di leggere i requisiti e 
+di guardare le sezioni corrispondenti di <i>TestApp</i>.
+Si ricorda che l'efficienza delle strutture dati è oggetto di valutazione.
+<p>
+Le eccezioni sono lanciate mediante la classe <b>SPException</b>; 
+devono essere effettuati soltanto i controlli specificati e non tutti quelli possibili.
+<p>
+La documentazione JDK è accessibile all'URL 
+<a href="https://oop.polito.it/api/" class="uri">https://oop.polito.it/api/</a>.
+</p>
+
+
+
+
+<h2>R1: Categorie, prodotti e prezzi </h2>
+
+Il metodo <b>int addProducts (String categoryName, String ProductNames, String ProductPrices) </b>
+permette di aggiungere nuovi prodotti definendone la categoria. Il metodo definisce il nome di una categoria,
+i nomi dei prodotti (relativi alla categoria) separati da virgole, 
+i prezzi (double) dei prodotti separati da virgole. 
+
+Il metodo lancia un'eccezione se il nome della categoria è già stato definito definito da una precedente chiamata al metodo, 
+il nome di un prodotto è già comparso in una categoria precedente, 
+il numero dei prezzi è diverso dal numero dei prodotti.
+Il risultato è il numero di prodotti che sono stati inseriti.
+Un esempio di invocazione  il cui valore di ritorno è pari a 5 è il seguente: 
+<i>addProducts ("cat1", "pa1,pa2,pa3,qa1,qa2", "10.00,5.23,12.45,4.00,15.50");</i>
+
+<p>
+Il metodo <b>double getPrice (String productName)</b> restituisce il prezzo di un prodotto 
+identificato tramite il suo nome o lancia un'eccezione se il prodotto non è definito.
+<p>
+
+Il metodo <b>mostExpensiveProductPerCategory()</b> restituisce per ciascuna categoria il nome del prodotto 
+con il prezzo più elevato (si suppongo sia unico); le categorie devono essere ordinate alfabeticamente.
+<p>
+
+
+
+<h2>R2 Tipi di sconti: per categorie, per prodotti </h2>
+
+Inizialmente la percentuale di sconto di una categoria o di un prodotto è 0.
+
+Il metodo <b>void setDiscount(String category, int percentage)</b> definisce la percentuale di sconto per tutti i prodotti della categoria.
+Il metodo lancia un'eccezione se la categoria non è definita o la percentuale di sconto supera 40. La percentuale può valere 0.
+Il metodo può essere richiamato più volte sulla stessa categoria, quindi nel tempo si possono susseguire varie percentuali di sconto 
+per la stessa categoria. 
+<p>
+
+Il metodo <b>getDiscountHistoryForCategory (String category)</b> restituisce la sequenza delle percentuali di sconto 
+nell'ordine con cui sono state introdotte (inclusa quella iniziale che vale 0). 
+<p>
+
+Il metodo <b> void setDiscount (int percentage, String... productNames)</b> 
+definisce la percentuale di sconto per tutti i prodotti indicati. 
+<p>
+I due metodi <i>setDiscount()</i> definiti in precedenza possono essere invocati più volte, con la possibilità
+di modificare ripetutamente la percentuale di un dato prodotto. Ad esempio è possibile definire uno sconto
+per tutti i prodotti di una categoria e poi andare a cambiare lo sconto per alcuni prodotti specifici. 
+Il valore di sconto effettivo è quello che corrisponde 
+all'ultima modifica in ordine di tempo (con uno dei due metodi)
+<p>
+
+Il metodo <b>getDiscountHistoryForProduct (String productName)</b> restituisce la sequenza delle percentuali di sconto 
+nell'ordine con cui sono state introdotte (inclusa quella iniziale che vale 0).
+<p>
+
+
+
+<h2>R3 Tessera punti </h2>
+ 
+Con il metodo <b>int issuePointsCard (String name, String  DateOfBirth)</b>, 
+dati il nome e la data di nascita (nel formato <i>"20210706"</i>) di un(a) cliente, 
+si può emettere una tessera punti (pointCard), che ha un codice progressivo (il risultato del metodo) a partire da 1000 incluso.
+Il metodo lancia un'eccezione se la coppia nome e data di nascita è già stata usata per ottenere una tessera punti.
+Una tessera punti raccoglie i punti relativi agli acquisti come è descritto nella sezione successiva. 
+La tessera contiene sia i punti correnti, 
+cioè quelli che possono essere riscattati negli acquisti (e che vengono man mano scalati), 
+sia i punti totali, cioè quelli ottenuti da tutti gli acquisti effettuati. 
+<p>
+
+Il metodo <b>void fromPointsToDiscounts (String points, String discounts)</b> 
+definisce una mappa (punti/sconti) ordinata (SortedMap<i>&lt;Integer, Integer&ht;</i>) che associa ai punti lo sconto applicabile.
+Il metodo lancia un'eccezione se il numero dei punti è diverso dal numero degli sconti.
+<br>
+Ad es. con la chiamata <i>fromPointsToDiscounts ("50,100,150,200", "2,5,7,10")</i> 
+si definisce che il riscatto di 50 punti dà uno sconto di 2 euro, 
+il riscatto di 100 punti dà uno sconto di 5 euro e così via.
+<p>
+
+Il metodo <b>getMapPointsDiscounts()</b> restituisce la mappa.
+<p>
+
+Il metodo <b>int getDiscountFromPoints(int points)</b> restituisce lo sconto relativo ai punti indicati 
+o dà 0 se i punti indicati non compaiono nella mappa punti/sconti; ad es. con la definizion dell'esempio
+precedente, 80 punti corrispondono ad uno sconto pari a 0.
+
+
+
+
+<h2>R4 Acquisti (Purchases)</h2>
+
+Il metodo <b>int addPurchase (int pointsCardCode, int pointsRedeemed, String productNames)</b> genera un acquisto (purchase). 
+Il primo parametro è il codice della tessera punti del/della cliente, 
+il secondo parametro indica il numero di punti che il/la cliente vuole riscattare, 
+il parametro productNames dà l'elenco dei prodotti acquistati. 
+Il metodo restituisce il codice dell'acquisto (purchase code), che è un numero intero progressivo a partire da 100 incluso.
+<p>
+Il metodo applica le percentuali di sconto corrente (che possono anche essere uguali a 0) associate ai prodotti. 
+Inoltre può applicare lo sconto relativo al numero di punti da riscattare: 
+lo sconto è applicato se il n. di punti è incluso nella mappa punti/sconti. 
+Se non è così, il numero di punti è ignorato (come se fosse 0).
+Il metodo lancia un'eccezione se i punti che si vogliono riscattare 
+sono maggiori dei punti correnti contenuti nella tessera.
+I punti eventualmente utilizzati per il riscatto 
+sono sottratti dal saldo corrente (ma non dal totale)dei punti della tessera.
+<p>
+Infine il metodo calcola il numero di punti ottenuti con l'acquisto: 
+esso è dato dal prezzo d'acquisto (a valle di tutti gli sconti) arrotondato (<i>Math.round</i>). 
+Tali punti sono sommati ai punti correnti e a quelli totali della tessera. 
+<p>
+
+Con il metodo <b>double getPurchasePrice (int purchaseCode)</b> si ottiene l'importo totale dell'acquisto.
+<p>
+Con il metodo <b>double getPurchaseDiscount (int purchaseCode)</b> 
+si ottiene lo sconto complessivo applicato all'acquisto, dato dagli sconti sui singoli prodotti
+e dall'eventuale sconto derivante dal riscatto di punti.
+<p>
+I due metodi precedenti lanciano un'eccezione se codice dell'acquisto non è definito.
+<p>
+
+Con il metodo <b>int getCurrentPoints (int pointsCardCode)</b> si ottiene il numero di punti correnti 
+della tessera di cui è dato il codice (punti accumulati - punti riscattati). 
+Il metodo lancia un'eccezione se la tessera punti non è definita.
+<p>
+Con il metodo <b>int getTotalPoints (int pointsCardCode)</b> si ottiene il numero totale di punti accumulati
+dalla tessera di cui è dato il codice. 
+Il metodo lancia un'eccezione se la tessera punti non è definita.
+
+
+
+
+<h2>R5 Statistiche</h2>
+
+Il metodo <b>pointsCardsPerTotalPoints()</b> genera una mappa che raggruppa i codici delle 
+tessere che hanno lo stesso numero totale di punti. I punti totali e i codici delle tessere sono ordinati. 
+Sono escluse le tessere con 0 punti.
+<p>
+Il metodo <b>customersPerCategory()</b> genera una mappa che associa ad ogni nome di categoria i nomi dei/delle clienti 
+che hanno comprato prodotti della categoria. I nomi delle categorie sono ordinati; 
+i nomi dei/delle clienti sono ordinati e senza duplicati.
+<p>
+Il metodo <b>productsPerDiscount()</b> genera una mappa che associa le percentuali di sconto più alte (tra la storia completa dei valori)
+dei prodotti escludendo i prodotti per cui tale percentuale è pari a 0.
+La mappa raggruppa i nomi dei prodotti per le percentuali di sconto. 
+I nomi sono ordinati alfabeticamente, mentre le chiavi sono ordinate in senso decrescente. 
+
+
+
+
+<h2>R6 Interfaccia cassa</h2>
+
+La classe <b>Supermarket</b> deve fornire anche un insieme di metodi che possono essere invocati
+da un'altra applicazione che supporta una cassa del supermercato, nel gestire gli scontrini.
+
+<p>
+Quando è necessario aprire uno scontrino (es. un nuovo cliente arriva alla cassa)
+viene invocato il metodo <b>newReceipt()</b> che restituisce un codice (univoco) 
+per il nuovo scontrino (un numero intero progressivo a partire da 0).
+
+<p>
+Per aggiungere le carta punti del cliente allo scontrino (in modo da associare
+i punti ed eventualmente poi richiedere gli sconti) si usa il metodo
+<b>receiptAddCard(int receiptCode, int PointsCard)</b>.
+Il metodo lancia un'eccezione se il codice della ricevuta o il codice della carta
+a punti non sono validi.
+Il codice della ricevuta si considera valido se è stato restituito da una precedente
+chiamata al metodo <i>newReceipt()</i> e non è ancora stato chiuso con una chiamata
+al metodo <i>closeReceipt()</i> (descritto più sotto).  
+
+<p>
+Dopo che è stata associata una carta punti allo scontrino è possibile richiedere
+il saldo punti disponibile per quella carta tramite il metodo 
+<b>receiptGetPoints(int receiptCode)</b>.
+Il metodo lancia un'eccezione se il codice della ricevuta non è valido oppure se
+non è stata associata alcuna carta allo scontrino.
+
+
+<p>
+Il metodo <b>receiptAddProduct(int receiptCode, String product)</b>
+permette di aggiungere un nuovo prodotto allo scontrino. 
+Il metodo lancia un'eccezione se il codice della ricevuta o il codice prodotto
+non sono validi.
+
+<p>
+Il metodo <b>receiptGetTotal(int receiptCode)</b> restituisce il totale
+delle ricevuta data. Il totale è la somme dei prezzi dei prodotti aggiunti
+allo scontrino fino a questo momento, tenendo conto degli sconti attualmente
+in vigore (si supponga che gli sconti non varino durante le operazioni sugli scontrini).
+Il metodo lancia un'eccezione se il codice dello scontrino non è valido.
+
+<p>&Egrave; possibile decidere di utilizzare dei punti attivi sulla carta
+punti associata allo scontrino per ottenere uno sconto tramite il metodo 
+<b>receiptSetRedeem(int receiptCode, int points)</b>.
+
+Il metodo lancia un'eccezione se il codice della ricevuta non è valido, 
+se non è stata associate nessuna carta allo scontrino,
+se il numero di punti specificato è superiore a quelli
+disponibili sulla carta, oppure il numero non corrisponde ad alcuno sconto.
+
+Lo sconto viene applicato al totale dello scontrino.
+
+<p>
+La chiusura dello scontrino (ovvero quando tutti i prodotti sono stati
+inseriti ed il cliente deve pagare) corrisponde
+alla chiamata del metodo <b>closeReceipt(int receiptCode)</b>.
+
+Questo metodo si comporata come il metodo <i>addPurchase()</i> 
+(definito al requisito R4), considerando tutti i prodotti 
+aggiunti allo scontrino e l'eventuale sconto con riscatto dalla carta punti.
+
+Il metodo restituisce il codice dell'acquisto 
+(come indicato nel metodo <i>addPurchase()</i>). 
+
+Il metodo lancia un'eccezione se il codice della ricevuta non è valido.
+
+
+</body>
+</html>

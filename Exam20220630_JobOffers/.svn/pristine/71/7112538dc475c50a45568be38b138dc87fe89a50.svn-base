@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Job Offers</title>
+<link href=".css.css" rel="stylesheet" type="text/css">
+<style>
+@media print {  /* adjusted to print the html to a single-page pdf */
+body {
+	font-size: 10pt;
+}
+</style>
+</head>
+<body>
+
+<h1>Job Offers</h1>
+
+Il programma simula la gestione di offerte di lavoro da parte di un'azienda.
+Tutte le classi si trovano nel pacakge <b>jobOffers</b>. 
+La classe principale è <b>JobOffers</b>. 
+La classe <b>TestApp</b> nel pacakge <i>examples</i> e contiene i principali casi di test ma non tutti.
+Le eccezioni sono lanciate tramite la classe <b>JOException</b>; 
+occorre eseguire solamente i controlli esplicitamente richiesti e non tutti quelli possibili.
+Quando un metodo lancia un'eccezione, non viene fatta alcuna modifica nei dati della classe.
+<br>
+Suggerimento: dopo aver implementato un metodo eseguite la  <i>TestApp</i> per verificare il risultato.
+<p>
+La documentazione JDK è disponibile all'URL 
+<a href="https://oop.polito.it/api/" class="uri">https://oop.polito.it/api/</a>.
+</p>
+
+<h2>R1: Capacità e posti</h2>
+
+<p>
+Il metodo <b>int addSkills (String ... skills)</b> inserisce alcune capacità, come ad esempio java, python, ecc.
+La capacità duplicate sono ignorate. Il metodo restituisce il numero di capacità totali inserite finora.
+</p>
+<p>
+Il metodo <b>int addPosition (String role, String ... skillLevels)</b> inserisce un posto di lavoro,
+come ad esempio <i>juniorProgrammer</i>, con le capacità richieste e il livello richiesto di conoscenza
+(si vedano gli esempi in <i>TestApp</i>).
+Una capacità è seguita da un <i>":"</i> e dal livello di conoscenza, compreso tra 4 e 8, inclusi.
+Il metodo lancia un'eccezione se: il posto è già stato inserito, una o più delle capacità non sono state definite
+oppure se il livello non è tra 4 e 8.
+Il risultato è la media dei livelli.
+</p>
+
+
+<h2>R2: Candidati e candidature</h2>
+
+<p>
+Il metodo <b>int addCandidate (String name, String ... skills)</b> inserisce il nome di un candidato con la
+sua lista di capacità. Il meodo lancia un'eccezione se il candidato è già stato aggiunto o se una capacità 
+non è stata definita. Il risultato è il numero di capacità.
+</p>
+<p>
+Il metodo <b>addApplications (String name, String ... positions)</b>  permette ad un candidato di candidarsi
+per uno o più posti di lavoro. Il metodo lancia un'eccesione se: il candidato non è stato definito, non tutti
+i posti di lavoro sono stati definiti, il candidato non ha le capacità richieste per i posti di lavoro.
+Il metodo restituisce una lista di candidature; una candidatura è una stringa che contiene il nome del candidato
+seguito da <i>":"</i> e dal nome di un posto di lavoro. Le stringhe sono ordinate per candidato e posto.
+</p>
+<p>
+Il metodo <b>getCandidatesForPositions()</b> restituisce una mappa le cui chiavi sono i nomi dei posti di lavoro
+in ordine alfabetico; i valori sono le liste ordinate dei candidati che si sono candidati al posto.
+I posti di lavoro se non hanno candidati non devono comparire.
+</p>
+
+
+<h2>R3: Consulenti e punteggi</h2>
+
+<p>
+Il metodo <b>int addConsultant (String name, String ... skills)</b> inserisce il nome di un consulente con le
+relative capacità. Il metodo lancia un'eccezione se il consulente è già stato definito o se una capacità non
+è stata definita. Il risultato è il numero di capacità.
+<p>
+Il metodo <b>Integer addRatings (String consultant, String candidate, String... skillRatings)</b>  permette a
+un consulente di assegnare un punteggio a ciascuna della capacità indicate da un candidato.
+Un esempio di punteggio è il seguente: <i>["java:8", "databases:6"]</i>.
+Ogni stringa è formata dalla capacità seguita da due-punti e il punteggio. Il punteggio è tra 4 e 10 inclusi.
+Il metodo lancia un'eccezione se il consulente o il candidato non sono stati definite, se le capacità del consulente
+non includono tutte quelle dichiarate dal candidato, o se ci sono dei punteggi fuori dai limiti.
+Il metodo restituisce la media dei punteggi.
+</p>
+
+<h2>R4: Scarto candidature e selezione delle ammissibili</h2>
+
+<p>
+Il metodo <b>discardApplications()</b> scarta le candidature dei candidati non ammissibili.
+Un candidato è considerato non ammissibile se una o più delle sue capacità hanno un punteggio inferiore 
+al livello richiesto per il posto di lavoro. I punteggi sono quelli precedentemente inseriti tramite
+il metodo <i>addRatings()</i>.
+Il metodo restituisce la lista delle candidature scartate, le candidature sono espresse da stringhe
+con il nome del candidato seguito da <i>":"</i> ed il nome del posto.
+La lista è ordinata alfabeticamente per candidati e posizioni. La lista può essere vuota.
+<p>
+Il metodo <b>getEligibleCandidates(String position)</b> seleziona le candidature ammissibili per un posto.
+I candidati devono essersi candidati alla posizione, le loro capacità devono includere quelle del posto,
+e inoltre i punteggi delle capacità (forniti dai consulenti) non devono essere inferiori ai livelli
+definiti col metodo <i>addPosition</i>. Il risultato è una lista di candidati ammissibili in ordine alfabetico,
+la lista può essere vuota.
+</body>
+</html>

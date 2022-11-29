@@ -1,0 +1,34 @@
+1.  Which among the following statements are valid for the `static` modifier?
+[ ] A1.1 - For a method it means that it cannot access any attribute
+[ ] A1.2 - For a method it means that it can only access static atttributes
+[ ] A1.3 - For a class it means that it can access the container class attributes
+[ ] A1.4 - For a class it means that it cannot access the container class attributes
+[ ] A1.5 - For a field it means that every object has its own copy
+
+
+2. What is required to get the natural ordering of the objects of a classe?
+[ ] A1.1 - implement interface Comparable
+[ ] A1.2 - implement method compare
+[ ] A1.3 - implement method compareTo
+[ ] A1.4 - redefine method equals
+[ ] A1.5 - redefine method hashCode
+
+
+3. How can a method throwing an exception be tested?
+[ ] A3.1 - Just checking the return value
+[ ] A3.2 - Just checking the method throws an exception
+[ ] A3.3 - This kind of method cannot be tested
+[ ] A3.4 - Two cases must be checked: with and without exception
+[ ] A3.5 - It is possible to use the test parameter 'expected' to signal a possible exception
+
+
+4. In the UML association Person --(owns>-- Car, knowing that a person can own no car
+  but also can own many cars, what multiplicity should be written close to Car?
+[ ] A4.1 - 0,1
+[ ] A4.2 - 0,*
+[ ] A4.3 - 1,1
+[ ] A4.4 - 1,*
+[ ] A4.5 - *,*
+
+
+To select an answer place a "X" in the "[ ]" --> "[X]"

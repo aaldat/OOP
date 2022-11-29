@@ -1,0 +1,53 @@
+package jobOffers;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class Position {
+	
+	String name;
+	Map<Skill, Integer> skills = new HashMap<>();
+	List<Candidate> candidates = new ArrayList<>();
+
+	public Position(String position, Map<Skill, Integer> skillsLvl) {
+		this.name = position;
+		this.skills = skillsLvl;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Map<Skill, Integer> getSkills() {
+		return skills;
+	}
+	
+	public double LevelAvg() {
+		int sum = 0;
+		int c = 0;
+		for(Integer i : skills.values()) {
+			sum += i;
+			c++;
+		}
+		return (sum/c);
+	}
+	
+	public void addCandidate(Candidate c) {
+		candidates.add(c);
+	}
+	
+	public List<Skill> getSkillsList() {
+		return skills.keySet().stream()
+				.sorted(Comparator.comparing((Skill s) -> s.getName()))
+				.collect(Collectors.toList());
+	}
+	
+	public List<Candidate> getCandidatesList() {
+		return candidates;
+	}
+
+}

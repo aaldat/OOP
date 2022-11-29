@@ -1,0 +1,33 @@
+package jobOffers;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class Consulent {
+	
+	String name;
+	Map<String, Skill> skills = new HashMap<>();
+
+	public Consulent(String name, Map<String, Skill> candidateSkills) {
+		this.name = name;
+		this.skills = candidateSkills;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Map<String, Skill> getSkills() {
+		return skills;
+	}
+	
+	public List<Skill> getSkillsList() {
+		return skills.values().stream()
+				.sorted(Comparator.comparing((Skill s) -> s.getName()))
+				.collect(Collectors.toList());
+	}
+
+}

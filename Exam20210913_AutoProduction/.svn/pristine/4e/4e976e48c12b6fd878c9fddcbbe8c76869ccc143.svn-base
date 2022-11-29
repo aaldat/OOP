@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Gestione Stabilimento di Produzione Automobili</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href=".css.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Gestione Stabilimento di Produzione Automobili</h1>
+</header>
+<!--
+> To generate html and pdf use
+> ```bash
+> $ pandoc -s -f markdown+Smart requirements.md -c .css.css -o requirements.html
+> $ pandoc -s -f markdown+Smart requirements.md -o requirements.pdf
+> ```
+-->
+<p>Sviluppare un sistema che permetta la gestione del sistema di produzione delle automobili di una casa automobilistica che ha vari centri di produzione.</p>
+<p>Tutte le classi devono essere nel package <code>it.polito.oop.production</code>. La classe <em>facade</em> attraverso cui tutte le operazioni sono eseguite è <code>Carmaker</code>, ogni nuova istanza di questa classe rappresenta una casa automobilistica distinta, con centri di produzione, magazzini e modelli di automobili distinti.</p>
+<p>La segnalazioni di errori ed anomalie avviene tramite eccezioni di tipo <code>BrandException</code>.</p>
+<p>Le automobili hanno 4 possibili tipi di motorizzazione che sono codificati all’interno del programma come numeri interi:</p>
+<ul>
+<li>0 - Diesel,</li>
+<li>1 - Benzina (Gasoline),</li>
+<li>2 - GPL,</li>
+<li>3 - Elettrico.</li>
+</ul>
+<p>La classe <code>TestApp</code> nel default package contiene un sintetico test per l’applicazione.</p>
+<p>La documentazione JDK è accessibile all’URL <a href="https://oop.polito.it/api/index.html" class="uri">https://oop.polito.it/api/index.html</a>.</p>
+<h2 id="r1-modelli">R1: Modelli</h2>
+<p>La gamma di automobili prodotte da una casa automobilistica è composta da modelli di cui è noto un codice alfanumerico univoco per la casa automobilistica (es. FCA123), il nome (es. Panda), l’anno di immissione nel mercato, la cilindrata (espressa in cc come numero float, es. 1.2) e il tipo di motorizzazione.</p>
+<ul>
+<li><p>È possibile inserire un nuovo modello di auto tramite il metodo <code>addModel()</code> che riceve come parametri codice, nome, anno, cilindrata, e motorizzazione. Se esiste già un modello con lo stesso codice il metodo scarta l’informazione e restituisce <em>false</em>, altrimenti restituisce <em>true</em>.</p></li>
+<li><p>E’ possibile conoscere il numero di modelli prodotti da una casa automobilistica attraverso il metodo <code>countModels()</code>.</p></li>
+<li><p>Il metodo <code>getModel()</code> accetta un codice di un modello e restituisce una stringa contenente tutti i dati memorizzati dalla classe separati da <code>","</code> nel seguente ordine: codice, nome, anno, cilindrata, motorizzazione. Nel caso il cui il codice del modello non esista il metodo deve ritornare <code>null</code>.</p></li>
+<li><p>Tutte le case automobilistiche smettono di produrre modelli dopo 10 anni dalla loro immissione sul mercato. Pertanto tramite il metodo <code>getActiveModels()</code> deve essere possibile ottenere una lista di codici di modelli attualmente in produzione sulla base dell’anno corrente. Ad esempio, essendo ad oggi nel 2021 i modelli attivi risultano tutti quelli immessi sul mercato a partire dal 2011 incluso.</p></li>
+<li><p>Le informazioni riguardanti tutti i modelli prodotti dalla casa automobilistica devono essere caricabili tramite il metodo loadFromFile da un file in formato TAB (<code>'\t'</code>) separated. Il metodo riceve come parametro il nome del file. Il file non contiene nessuna intestazione. Le colonne sono ordinate con lo stesso ordine restituito dal metodo <code>getModel()</code>. In caso di duplicati (stesso codice modello) si mantiene la prima istanza scartando tutte le successive. In caso di errori di I/O l’eccezione deve essere propogata al chiamante.</p></li>
+</ul>
+<p>Suggerimento: per ottenere l’anno corrente è possibile usare <code>java.time.LocalDate.now().getYear()</code></p>
+<h2 id="r2-siti-di-produzione">R2: Siti di Produzione</h2>
+<ul>
+<li><p>I siti di produzione sono definiti tramite il metodo <code>buildFactory()</code> che accetta un nome come parametro. Il metodo lancia un’eccezione in caso di nome duplicato.</p></li>
+<li><p>L’elenco dei nomi dei siti di produzione è restituito dal metodo <code>getFactories()</code> sotto forma di una lista (eventualmente vuota se non sono state create delle factories).</p></li>
+<li><p>Il metodo <code>setProductionLines()</code> permette di definire le capacità di un sito di produzione in termini di linee di produzione. Il metodo riceve come parametri il nome del sito di produzione e un numero variabile di parametri di tipo stringa nel formato <code>nome_linea:capacita:motorizzazione</code>. La capacità è un numero intero positivo e indica il numero di auto prodotte annualmente dalla linea. Motorizzazione indica la capacità della linea di produrre auto con una delle 4 possibili motorizzazioni. Il metodo lancia un’eccezione se il nome del sito di produzione non è definito o se uno dei parametri forniti non è correttamente formattato. Nel caso in cui il nome della linea esista già viene aggiornato il valore della capacità.</p></li>
+<li><p>Il metodo <code>estimateYearlyProduction()</code> accetta il nome di un sito di produzione e restituisce una mappa che per ogni tipo di motorizzazione fornisce la quantità totale di auto che il sito può produrre in un anno. Questo metodo lancia un’eccezione se il nome del sito di produzione non è definito o se non sono state definite linee di produzione per quel sito.</p></li>
+</ul>
+<h2 id="r3-magazzino">R3: Magazzino</h2>
+<ul>
+<li><p>Il metodo <code>buildStorage()</code> permette di definire un nuovo magazzino. Ogni magazzino è identificato da un nome e dalla capienza in termini di numero di automobili che può contenere. Il metodo lancia un’eccezione se il nome del magazzino esiste già o se si tenta di fornire una capacità minore o uguale a zero.</p></li>
+<li><p>L’elenco dei nomi dei magazzini è restituito dal metodo <code>getStorageList()</code> sotto forma di una lista (eventualmente vuota se non sono stati creati dei magazzini).</p></li>
+<li><p>I metodi <code>storeCar()</code> e <code>removeCar()</code> ricevono come parametri il nome di un magazzino e il modello di un’auto e permettono di tenere traccia del numero di macchine di un certo modello parcheggiate nel magazzino. I metodi generano un’eccezione se richiamati con un nome di magazzino o di modello auto inesistente. Inoltre il metodo <code>storeCar()</code> genera un’eccezione se richiamato su un magazzino che ha raggiunto la sua capacità massima mentre il metodo <code>removeCar()</code> genera un’eccezione se richiamato su un magazzino vuoto.</p></li>
+<li><p>Il metodo <code>getStorageSummary()</code> riceve come parametro il nome di un magazzino e restituisce una mappa che associa a ogni modello di automobile il numero di auto di quel modello parcheggiate nel magazzino. Il metodo lancia un’eccezione se il magazzino non esiste.</p></li>
+</ul>
+<h2 id="r4-indice-di-sostenibilità-del-brand">R4: Indice di sostenibilità del brand</h2>
+<p>Per ogni modello di auto è possibile calcolare un’indice di sostenibilità collegato all’inquinamento della vettura.</p>
+<p>L’indice di sostenibilità dipende dalla tipologia del motore e dall’anno di produzione del modello ed è calcolato come:</p>
+<p><em>IS = enginetype × 100 / (currentyear - modelyear)</em></p>
+<p>Ogni anno le autorità governative dividono i modelli di automobili in tre fasce di sostenibilità usando IS sulla base di due soglie ISminn e ISmax: low (IS &lt; ISmin), medium (ISmin &lt;= IS &lt;= ISmax), high (IS &gt; ISmax).</p>
+<ul>
+<li><p>Il metodo <code>setISThresholds()</code> definisce le due soglie ISmin e ISmax per un costruttore, entrambe di tipo float.</p></li>
+<li><p>Il metodo <code>getModelsSustainability()</code> riceve come parametro un intero che rappresenta una fascia di sostenibilità (0: low, 1: medium, 2: high) e restituisce una lista contenente l’elenco dei nomi dei modelli classificati in quella fascia. Si assuma che il parametro sia sempre corretto.</p></li>
+<li><p>Il metodo <code>getCarMakerSustainability()</code> calcola l’indice di sostenibilità media di tutte le automobili immagazzinate nei magazzini del produttore calcolata sulla base del loro modello.</p></li>
+</ul>
+<h2 id="r5-pianificazione">R5: Pianificazione</h2>
+<p>Il metodo <code>plan()</code> accetta come parametro una lista di richieste di produzione annuali per una serie di modelli di automobili.</p>
+<p>La lista di richieste è codificata sotto forma di una stringa con il seguente formato:</p>
+<p><code>&lt;modello&gt;:&lt;qt1&gt;,&lt;modello2&gt;:&lt;qt2&gt;,&lt;modello3&gt;:&lt;qt3&gt; ...</code></p>
+<p>Il metodo implementa un algoritmo di pianificazione che cerca di distribuire la produzione su tutte le linee disponibili.</p>
+<p>L’algoritmo processa iterativamente ogni richiesta di produzione nell’ordine in cui è fornita cercando di saturare la produzione di una linea prima di passare a quella successiva.</p>
+<p>Pertanto si parte dalla prima linea e si usa tutta la sua capacità produttiva. Terminata questa linea ci si sposta sulla seconda linea e così via fino a che: o la richiesta è soddisfatta oppure non si riesce a soddisfare le richieste.</p>
+<p>Il metodo ritorna vero se tutte le richieste sono state soddisfatte, falso in caso contrario.</p>
+<p>Chiamate successive al metodo effettuano l’allocazione partendo alla capacità residua rimasta dopo le chiamate precedenti.</p>
+<p>Si assuma che il parametro del metodo sia sempre corretto.</p>
+<p>I metodi <code>getLineCapacity()</code> e <code>getLineAllocatedCapacity()</code> ricevono come parametro il nome di un sito di produzione e il nome di una linea di produzione in esso contenuta e ritornano rispettivamente la capacità della linea e la capacità allocata della linea. Si assuma che siano sempre richiamati con parametri corretti.</p>
+<h2 id="r6-statistiche">R6 Statistiche</h2>
+<p>Dopo aver prodotto un piano di allocazione è possibile valutarne le caratteristiche usando i seguenti metodi che si basano sul risultato dell’ultima chiamata al metodo <code>plan()</code>.</p>
+<p>Il metodo <code>linesfullyAllocated()</code> restituisce la percentuale di linee di produzione (considerando tutti i siti di produzione) che sono state totalmente allocate.</p>
+<p>Il metodo <code>unusuedLines()</code> restituisce la percentuale di linee di produzione (considerando tutti i siti di produzione) che non sono state mai usate.</p>
+</body>
+</html>

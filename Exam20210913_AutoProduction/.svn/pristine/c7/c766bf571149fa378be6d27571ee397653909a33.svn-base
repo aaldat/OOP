@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Car Manufacturer Production System</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href=".css.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Car Manufacturer Production System</h1>
+</header>
+<!--
+> To generate html and pdf use
+> ```bash
+> $ pandoc -s -f markdown+Smart requirements.md -c .css.css -o requirements.html
+> $ pandoc -s -f markdown+Smart requirements.md -o requirements.pdf
+> ```
+-->
+<p>To develop a system that allows the management of the automobile production system of a car manufacturer that has several production centers.</p>
+<p>All classes must be in the <code>it.polito.oop.production</code> package. <code>Carmaker</code> is the <em>facade</em> class through which all operations are performed, each new instance of this class represents a distinct car manufacturer, with distinct manufacturing centers, warehouses and car models.</p>
+<p>The reporting of errors and anomalies occurs through exceptions of type <code>BrandException</code>.</p>
+<p>Cars have 4 possible types of engines which are encoded within the program as whole numbers:</p>
+<ul>
+<li>0 - Diesel,</li>
+<li>1 - Petrol (Gasoline),</li>
+<li>2 - LPG,</li>
+<li>3 - Electric.</li>
+</ul>
+<p>The <code>TestApp</code> class in the default package contains a simplistic test for the application.</p>
+<p>The JDK documentation is accessible at the URL <a href="https://oop.polito.it/api/index.html" class="uri">https://oop.polito.it/api/index.html</a>.</p>
+<h2 id="r1-models">R1: Models</h2>
+<p>The models produced by a car manufacturer are defined by the unique alphanumeric code used by the car manufacturer (e.g., FCA123), the name (e.g., Panda), the year of release, the engine size (expressed in cc as a float number, e.g., 1.2), and the type of engine.</p>
+<ul>
+<li><p>It is possible to insert a new car model using the <code>addModel()</code> method, which receives as parameters the code, name, year, displacement, and engine. If a model with the same code already exists, the method discards the information and returns <em>false</em>, otherwise it returns <em>true</em>.</p></li>
+<li><p>It is possible to know the number of models produced by a car manufacturer through the <code>countModels()</code> method.</p></li>
+<li><p>The <code>getModel()</code> method accepts a model code and returns a string containing all the data stored by the class separated by a comma <code>','</code> in the following order: code, name, year, displacement, engine. In case the model code does not exist the method must return <code>null</code>.</p></li>
+<li><p>All car manufacturers stop producing models after 10 years of placing them on the market. Through the <code>getActiveModels()</code> method it is possible to obtain a list of the codes of all models currently in production based on the current year. For example, all models placed on the market since 2011 included are active today, september 2021.</p></li>
+<li><p>The information regarding all the models produced by the car manufacturer must be loaded using the loadFromFile method from a file in tab-separated format (i.e., <code>'\t'</code>). The method takes the name of the file as a parameter. The file does not contain any headers. The columns are sorted in the same order as returned by the <code>getModel()</code> method. In case of duplicates (same model code) the first instance is kept discarding all subsequent ones. In case of I/O errors, the exception must be passed on to the caller.</p></li>
+</ul>
+<p>Hint: to get the current year you can use <code>java.time.LocalDate.now().GetYear()</code></p>
+<h2 id="r2-production-sites">R2: Production Sites</h2>
+<ul>
+<li><p>Production sites are defined via the <code>buildFactory()</code> method which takes a name as a parameter. The method throws an exception in case of a duplicate name.</p></li>
+<li><p>The list of production site names is returned by the <code>getFactories()</code> method in the form of a list. An empty list should be returned if no factories have been created.</p></li>
+<li><p>The <code>setProductionLines()</code> method allows you to define the capabilities of a production site in terms of production lines. The method receives as parameters the name of the production site and a variable number of string-type parameters in the format <code>line_name:capacity:motorization</code>. The capacity is a positive integer and indicates the number of cars produced annually by the line. The motorization indicates the ability of the line to produce cars with one of the 4 possible types of motorization. The method throws an exception if the production site has not been defined or if one of the supplied parameters is not properly formatted. If the line name already exists, the capacity value is updated.</p></li>
+<li><p>The <code>estimateYearlyProduction()</code> method accepts the name of a production site and returns a map that for each type of engine provides the total amount of cars that the site can produce in a year. This method throws an exception if the production site name has not been defined or if no production lines have been defined for that site.</p></li>
+</ul>
+<h2 id="r3-warehouse">R3: Warehouse</h2>
+<ul>
+<li><p>The <code>buildStorage()</code> method defines a new warehouse. Each warehouse is identified by a name and by the capacity in terms of the number of cars it can hold. The method should throw an exception if the warehouse name already exists or if an attempt is made to supply capacity less than or equal to zero.</p></li>
+<li><p>The list of warehouse names is returned by the <code>getStorageList()</code> method in the form of a list. An empty list should be returned if no warehouses have been created.</p></li>
+<li><p>The <code>storeCar()</code> and <code>removeCar()</code> methods control the cars of a certain model parked in the warehouse. They both take as parameters the name of a warehouse and the model of a car, and both throw an exception if invoked with a non-existent inventory or car model name. Additionally, the <code>storeCar()</code> method throws an exception if called on a warehouse that has reached its maximum capacity, while the <code>removeCar()</code> method throws an exception if called on an empty warehouse.</p></li>
+<li><p>The <code>getStorageSummary()</code> method takes the name of a warehouse as a parameter and returns a map that associates with each car model the number of cars of that model parked in the warehouse. The method throws an exception if the warehouse does not exist.</p></li>
+</ul>
+<h2 id="r4-brand-sustainability-index">R4: Brand sustainability index</h2>
+<p>For each car model it is possible to calculate a <em>sustainability index</em> (IS) linked to the pollution of the car. Such sustainability index depends on the type of engine and the year of production of the model and is calculated as:</p>
+<p><code>IS = enginetype * 100 / (currentyear - modelyear)</code></p>
+<p>Every year, government authorities divide car models into three sustainability classes based on IS: low (IS &lt; ISmin); medium (ISmin &lt;= IS &lt;= ISmax); high (IS &gt; ISmax) .</p>
+<ul>
+<li><p>The <code>setISThresholds()</code> method defines the two thresholds ISmin and ISmax for a constructor, both of type float.</p></li>
+<li><p>The <code>getModelsSustainability()</code> method takes as a parameter an integer representing a sustainability band (0 for “low”, 1 for “medium”, and 2 for “high”) and returns a list containing the list of model names classified in that band. Assume that the parameter is always correct.</p></li>
+<li><p>The <code>getCarMakerSustainability()</code> method calculates the average sustainability index of all cars stored in the manufacturer’s warehouses based on their model.</p></li>
+</ul>
+<h2 id="r5-planning">R5: Planning</h2>
+<p>The <code>plan()</code> method gets a list of annual production requests for a series of car models. The request list is encoded in the form of a string with the following format:</p>
+<p><code>&lt;model&gt;:&lt;qt1&gt;,&lt;model2&gt;:&lt;qt2&gt;,&lt;model3&gt;:&lt;qt3&gt; ...</code></p>
+<p>The method implements a planning algorithm that tries to distribute production on all available lines.</p>
+<p>The algorithm iteratively processes each production request in the order in which it is supplied, trying to saturate the production of one line before moving on to the next.</p>
+<p>That is, it starts from the first production line and uses all of its production capacity. Then, it moves to the second line, and so on until either all requests are satisfied, or a request cannot be satisfied. The method returns <code>true</code> if all requests have been satisfied, <code>false</code> otherwise.</p>
+<p>Subsequent calls to the method should consider the remaining capacity left after the previous calls.</p>
+<p>Assume that the method parameter is always correct.</p>
+<p>The methods <code>getLineCapacity()</code> and <code>getLineAllocatedCapacity()</code> methods gets the name of a production site and the name of a production line inside it, and return respectively the line capacity and the allocated capacity of the line. Assume that they are always called with correct parameters.</p>
+<h2 id="r6-statistics">R6 Statistics</h2>
+<p>After defining an allocation plan using the <code>plan()</code> method, it is possible to evaluate its characteristics using the following methods.</p>
+<p>The <code>linesfullyAllocated()</code> method returns the percentage of production lines (considering all production sites) that have been fully allocated.</p>
+<p>The <code>unusuedLines()</code> method returns the percentage of production lines that have never been used, considering all production sites.</p>
+</body>
+</html>

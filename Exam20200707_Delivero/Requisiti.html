@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Delivero</title>
+	<link href=".css.css" rel="stylesheet" type="text/css">
+	<style>
+		@media print {  /* adjusted to print the html to a single-page pdf */
+		body {
+			font-size: 10pt;
+		}
+	</style>
+</head>
+<body>
+
+<h1>Delivero</h1>
+Il programma simula il back-end di un portale di consegna di cibo a domicilio. 
+<p>
+Tutte le classi si trovano nel package <b>delivero</b>. La classe principale è <b>Delivery</b>. 
+La classe <b>TestApp</b> nel package <b>example</b> contiene un test con esempi di uso (che non copre tutti i casi di test).
+ Le eccezioni sono lanciate mediante la classe <b>DeliveryException</b>. 
+<p>
+&Egrave; possibile accedere alla <a href="https://oop.polito.it/api" target="_blank">documentazione delle API Java</a>.
+</p>
+ 
+<h2>R1 Ristoranti</h2>
+<p>
+I ristoranti che si appoggiano al sito Delivero sono etichettati con una categoria (es., tradizionale, fast food, etnico, cinese, ecc.).
+Il metodo <b>addCategory(String category)</b> permette di aggiungere una categoria alla lista delle categorie gestite dal servizio. Il metodo lancia un'eccezione se la categoria &eacute; gi&aacute; presente.</p>
+<p>
+Il metodo <b>getCategories()</b> restituisce la lista dei nomi delle categorie definite.</p>
+<p>
+Il metodo <b>addRestaurant(String name, String category)</b> permette di aggiungere un nuovo ristorante (il cui nome è univoco) e di assegnargli una categoria. Il metodo lancia un'eccezione se la categoria non &eacute; definita.</p>
+<p>
+Il metodo <b>getRestaurantsForCategory(String category)</b> fornisce una lista ordinata alfabeticamente dei nomi dei ristoranti etichettati con una certa categoria. Restituisce una lista vuota nel caso non ci sia nessun ristorante nella categoria oppure la categoria non esista.</p>
+
+
+<h2>R2 Piatti</h2>
+<p>
+Il metodo <b>addDish(String name, String restaurantName, float price)</b> aggiunge un piatto alla lista dei piatti forniti da un ristorante. Per ogni piatto &eacute; definito un prezzo. Il metodo lancia un'eccezione se esiste gi&aacute; un piatto con quel nome presso lo stesso ristorante.</p>
+<p>
+Il metodo <b>getDishesByPrice(float minprice, float maxprice)</b> restituisce una mappa che associa al nome di ogni ristorante la lista di nomi di piatti il cui prezzo è compreso tra <i>minprice</i> e <i>maxprice</i> (estremi inclusi). Se un ristorante non ha piatti inclusi nella fascia di prezzo specificata non deve comparire nella mappa. 
+<p>Il metodo <b>getDishesForRestaurant(String restaurantName)</b> restituisce la lista ordinata in ordine alfabetico dei nomi dei piatti venduti da ristorante dato.
+Se il ristorante non esiste oppure non fornisce piatti il metodo restituisce una lista vuota. 
+<p>
+Il metodo <b>getDishesByCategory(String category)</b> restituisce la lista di tutti i nomi dei piatti forniti da tutti i ristoranti appartenenti alla categoria indicata. Se la categoria non &eacute; definita o non ci sono ristoranti in quella categoria il metodo restituisce una lista vuota.
+<p>
+
+
+<h2>R3 Ordini</h2>
+<p>
+Il metodo <b>addOrder(String dishName[], int quantity[], String customerName, String restaurantName, int deliveryTime, int deliveryDistance)</b> crea un ordine di consegna per un ristorante. Ogni ordine pu&oacute; contenere pi&uacute; di un piatto con le rispettive quantit&aacute;. Il tempo di consegna (<i>deliveryTime</i>) è indicato con un numero intero compreso tra 8 e 23. La distanza di consegna (<i>deliveryDistance</i>) è espressa in chilometri. Si assuma che il numero i parametri passati al metodo siano sempre corretti. Deve essere mantenuta l'informazione dell'ordine di arrivo delle richieste.</p><p>Il metodo <i>addOrderd()</i> restituisce un numero progressivo d'ordine, il primo ordine ha numero 1.
+
+<p>
+Il metodo <b>scheduleDelivery(int deliveryTime, int maxDistance, int maxOrders)</b> permette di schedulare le consegne. Il sistema delivero ha vari tipi di fattorini, alcuni in bicicletta, altri motorizzati. Per ottimizzare le consegne in base alle capacità del fattorino il metodo restituisce i numeri d'ordine dei primi <i>maxOrders</i> (seguendo l'ordine di arrivo degli ordini) schedulati per il tempo di consegna  uguale a <i>deliveryTime</i>, la cui distanza di consefgna è minore o uguale a <i>maxDistance</i>.Una volta restituiti dal metodo gli ordini vanno marcati come assegnati in modo che non siano più considerati nelle chiamate successive. Il metodo ritorna una lista vuota nel caso non ci siano ordini (non ancora assegnati) che soddisfino i requisiti.
+
+<p>
+Il metodo <b>getPendingOrders()</b> restituisce il numero di ordini che devono ancora essere assegnati.
+
+
+<h2>R4 Valutazioni</h2>
+<p>
+Il metodo <b>setRatingForRestaurant(String restaurantName, int rating)</b> permette di registrare la valutazione (un numero da 0 a 5 inclusi) di un ristorante da parte di un cliente.Le valutazioni fuori dall'intervallo di validit&agrave; sono scartate.
+
+<p>
+Il metodo <b>restaurantsAverageRating()</b> restituisce una lista ordinata di ristoranti in ordine decrescente di valutazione media. La valutazione media di un ristorante è calcolata come la somma delle valutazioni diviso il numero delle valutazioni. 
+Se il ristorante non ha ricevuto alcuna valutazione non compare nella lista.
+
+<h2>R5 Statistiche</h2>
+<p>
+Il metodo <b>ordersPerCategory()</b> restituisce una mappa che associa a ogni categoria il numero di ordini effettuati in ristoranti di quella categoria. Anche le categorie che non hanno ricevuto ordini devono essere incluse nel risultato. 
+<p>
+Il metodo <b>bestRestaurant</b> restituisce il nome del ristorante che ha ottenuto la valutazione media più alta. Si ignori il problema di più ristoranti a pari punteggio.
+
+</body>
+</html>

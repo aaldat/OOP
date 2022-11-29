@@ -1,0 +1,139 @@
+package jobOffers; 
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+public class JobOffers  {
+	
+	Map<String, Skill> skillsList = new HashMap<>();
+	Map<String, Position> positionsList = new HashMap<>();
+	Map<String, Candidate> candidates = new HashMap<>();
+	Map<String, Consulent> consulents = new HashMap<>();
+	Map<Skill, Integer> skillsRatings = new HashMap<>();
+
+//R1
+	public int addSkills (String... skills) {
+		for(String s : skills) {
+			if(!skillsList.containsKey(s)) {
+				Skill sk = new Skill(s);
+				skillsList.put(sk.getName(), sk);
+			} else {
+				
+			}
+		}
+		return skillsList.size();
+	}
+	
+	public int addPosition (String position, String... skillLevels) throws JOException {
+		if(positionsList.get(position) != null) {
+			throw new JOException("Il posto di lavoro e' gia' stato inserito.");
+		} else {
+			Map<Skill, Integer> skillsLvl = new HashMap<>();
+			for(String s : skillLevels) {
+				String[] skillsLevels = s.split(":");
+				if(Integer.parseInt(skillsLevels[1]) < 4 || Integer.parseInt(skillsLevels[1]) > 8) throw new JOException("Range invalido");
+				skillsLvl.put(skillsList.get(skillsLevels[0]), Integer.parseInt(skillsLevels[1]));
+			}
+			Position p = new Position(position, skillsLvl);
+			positionsList.put(position, p);
+			return (int)Math.round(p.LevelAvg());
+		}
+		
+	}
+	
+//R2	
+	public int addCandidate (String name, String... skills) throws JOException {
+		if(candidates.containsKey(name)) throw new JOException("Candidato gia' inserito.");
+		Map<String, Skill> candidateSkills = new HashMap<>();
+		for(String s : skills) {
+			if(!skillsList.containsKey(s)) throw new JOException("Skill non esistente.");
+			candidateSkills.put(s, skillsList.get(s));
+		}
+		Candidate c = new Candidate(name, candidateSkills);
+		candidates.put(name, c);
+		return candidateSkills.size();
+	}
+	
+	public List<String> addApplications (String candidate, String... positions) throws JOException {
+		if(!candidates.containsKey(candidate)) throw new JOException("Candidato non inserito.");
+		Candidate c = candidates.get(candidate);
+		List<String> res = new ArrayList<>();
+		for(String s : positions) {
+			if(!positionsList.containsKey(s)) 	throw new JOException("Il posto di lavoro non esistente.");
+			Position p = positionsList.get(s);
+			if(!p.getSkillsList().equals(c.getSkillsList())) throw new JOException("Il candidato non ha tutti i requisiti.");
+			p.addCandidate(c);
+			res.add(c.getName() + ":" + p.getName());
+		}
+		return res;
+	} 
+	
+	public TreeMap<String, List<String>> getCandidatesForPositions() {
+		return positionsList.values().stream()
+				.sorted(Comparator.comparing(Position::getName))
+				.filter(p -> p.getCandidatesList().size() > 0)
+				.collect(Collectors.groupingBy(Position::getName, TreeMap::new, Collectors.mapping(Position::getCandidatesList, null)));
+	}
+	
+	
+//R3
+	public int addConsultant (String name, String... skills) throws JOException {
+		if(consulents.containsKey(name)) throw new JOException("Consulente gia' inserito.");
+		Map<String, Skill> consulentSkills = new HashMap<>();
+		for(String s : skills) {
+			if(!skillsList.containsKey(s)) throw new JOException("Skill non esistente.");
+			consulentSkills.put(s, skillsList.get(s));
+		}
+		Consulent c = new Consulent(name, consulentSkills);
+		consulents.put(name, c);
+		return consulentSkills.size();
+	}
+	
+	public Integer addRatings (String consultant, String candidate, String... skillRatings)  throws JOException {
+		Consulent cs = consulents.get(consultant);
+		Candidate cd = candidates.get(candidate);
+		int notIn = 0;
+		for(String s : skillRatings) {
+			String[] skillsLevels = s.split(":");
+			if(Integer.parseInt(skillsLevels[1]) < 4 || Integer.parseInt(skillsLevels[1]) > 10) throw new JOException("Range invalido");
+			cd.addRating(skillsList.get(skillsLevels[0]), Integer.parseInt(skillsLevels[1]));
+			skillsRatings.put(skillsList.get(skillsLevels[0]), Integer.parseInt(skillsLevels[1]));
+		}
+		
+		if(!consulents.containsKey(cs.getName())) throw new JOException("Consulente non esistente.");
+		if(!candidates.containsKey(cd.getName())) throw new JOException("Candidato non esistente.");
+		
+		for(Skill s : cd.getSkillsList()) {
+			if(!cs.getSkillsList().contains(s)) notIn++;
+		}
+		if(notIn > 0) throw new JOException("Il consulente non ha tutti i requisiti.");
+		System.out.println(cd.RatingsAvg());
+		return (cd.RatingsAvg());
+	}
+	
+	public int RatingsAvg() {
+		int sum = 0;
+		int c = 0;
+		for(Integer i : skillsRatings.values()) {
+			sum += i;
+			c++;
+		}
+		System.out.println((int)(sum/c));
+		return (int)(sum/c);
+	}
+	
+//R4
+	public List<String> discardApplications() {
+		return null;
+	}
+	
+	 
+	public List<String> getEligibleCandidates(String position) {
+		return null;
+	}
+	
+
+	
+}
+
+		

@@ -1,0 +1,35 @@
+
+1.  Quali di queste affermazioni sono valide per il modificatore 'static'?
+[ ] A1.1 - Per un metodo significa che NON puo' accedere ad alcun attributo
+[ ] A1.2 - Per un metodo significa che puo' accedere a attributi solo static
+[ ] A1.3 - Per una classe significa che puo' accedere agli attributi della classe contenitore
+[ ] A1.4 - Per una classe significa che NON puo' accedere agli attributi della classe contenitore
+[ ] A1.5 - Per un attributo significa che ogni oggetto ne ha una copia
+
+
+2. Per ottenere un ordinamento naturale degli oggetti di una classe che cosa serve fare?
+[ ] A1.1 - implementare l'interfaccia Comparable
+[ ] A1.2 - implementare il metodo compare
+[X] A1.3 - implementare il metodo compareTo
+[ ] A1.4 - ridefinire il metodo equals
+[ ] A1.5 - ridefinire il metodo hashCode
+
+
+3. Come si puo' testare un metodo che lancia un'eccezione?
+[ ] A3.1 - Si verifica solo il valore di ritorno
+[ ] A3.2 - Si verifica solo che lanci l'eccezione
+[ ] A3.3 - Non è possibile testare questo tipo di metodi
+[ ] A3.4 - Si verificano i due casi con e senza eccezione
+[X] A3.5 - Si può usare il parametro di test 'expected' per segnalare la possibile eccezione
+
+
+4.  Per l'associazione Persona --(possiede)— Auto, sapendo che una persona 
+	in generale può non possedere l’automobile ma anche essere proprietario di più automobili, 
+	che molteplicità si scrive vicino a Auto?
+[ ] A4.1 - 0,1
+[X] A4.2 - 0,*
+[ ] A4.3 - 1,1
+[ ] A4.4 - 1,*
+[ ] A4.5 - *,*
+
+Per selezionare una risposta inserire una "X" tra le "[ ]" --> "[X]"

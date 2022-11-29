@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Delivero</title>
+	<link href=".css.css" rel="stylesheet" type="text/css">
+	<style>
+		@media print {  /* adjusted to print the html to a single-page pdf */
+		body {
+			font-size: 10pt;
+		}
+	</style>
+</head>
+<body>
+
+<h1>Delivero</h1>
+The program implements the back-end of a food delivery system. 
+<p>
+All classes are contained in the package <b>delivero</b>. The main class is <b>Delivery</b>. 
+The class TestApp <b>TestApp</b> in the package <b>example</b> contains an example of use of the Delivery class.
+Exceptions are generated through the class  <b>DeliveryException</b>. 
+<p>
+It is possible to access the <a href="https://oop.polito.it/api" target="_blank">Java API Documentation</a>.
+</p>
+ 
+<h2>R1 Restaurants</h2>
+<p>
+The restaurants that use the Delivero service are labeled with a category (e.g., traditional, fast food, ethnic, chinese, etc.).
+The method <b>addCategory(String category)</b> enables to add one category to the list of categories managed by the service. The method throws an exception if the category is already available.</p>
+<p>
+The method <b>getCategories()</b> returns the list of defined categories.</p>
+<p>
+The method <b>addRestaurant(String name, String category)</b> registers a new restaurant (whose name is unique) to the service with a related category. The method throws an exception if the category is not defined.</p>
+<p>
+The method <b>getRestaurantsForCategory(String category)</b> returns an ordered list by name of the restaurants of a given category. It returns an empty list in there are no restaurants in the selected category or the category does not exist.</p>
+
+
+<h2>R2 Dishes</h2>
+<p>
+The method <b>addDish(String name, String restaurantName, float price)</b> adds a dish to the list of dishes of a restaurant. Every dish has a given price. The method throws an exception if the dish name already exists in the same restaurant.</p>
+<p>
+The method <b>getDishesByPrice(float minprice, float maxprice)</b> returns a map associating the name of each restaurant with the list of the name of the dishes whose price is in the provided range of price (limits included). If the restaurant has no dishes in the range, it does not have to appear in the map.  <p>
+The method <b>getDishesForRestaurant(String restaurantName)</b> returns the ordered list of dishes sold by a given restaurant. 
+If the restaurant does not exist or does not sell dishes the method must return an empty list. 
+<p>
+The method <b>getDishesByCategory(String category)</b> returns the list of all dish names sold by all restaurants belonging to the given category. If the category is not defined or there are no dishes in the category the method must return and empty list. 
+<p>
+
+
+<h2>R3 Orders</h2>
+<p>
+The method <b>addOrder(String dishName[], int quantity[], String customerName, String restaurantName, int deliveryTime, int deliveryDistance)</b> creates a delivery order. Each order may contain more than one product with the related quantity. The delivery time is indicated with a number in the range <i>8</i> to <i>23</i>. The delivery distance is expressed in kilometers. The parameters of the method can be assumed correct. The method must record the requests arrival order.</p> 
+<p>The method <i>addOrderd()</i> return a progressive order number, the first order has number 1.
+<p>
+The method <b>scheduleDelivery(int deliveryTime, int maxDistance, int maxOrders)</b> enables to schedule the deliveries. Delivero has several bellboys, some using bicycle, others motorbikes. To optimize the delivery based on the transportation this method returns the order numbers of the first <i>maxOrders</i> (following the orders arrival time) scheduled to be delivered at <i>deliveryTime</i> whose <i>deliveryDistance</i> is lower or equal that <i>maxDistance</i>. Once returned by the method the orders must be marked as assigned so that they will not be considered if the method is called again. The method returns an empty list if there are no orders (not yet assigned) that meet the requirements.
+
+<p>
+The method <b>getPendingOrders()</b> returns the number of orders that still need to be assigned. 
+
+
+<h2>R4 Ratings</h2>
+<p>
+The method <b>setRatingForRestaurant(String restaurantName, int rating)</b> records a rating (a number between 0 and 5, boundaries included) of a restaurant. Ratings outside the valid range are discarded.
+
+<p>
+The method <b>restaurantsAverageRating()</b> returns the ordered list of restaurant. The restaurant must be ordered by decreasing average rating. The average rating of a restaurant is the sum of all rating divided by the number of ratings.  
+If a restaurant received no rating, it does not appear in the list.
+
+<h2>R5 Stats</h2>
+<p>
+The method <b>ordersPerCategory()</b> returns a map associating each category to the number of orders placed to restaurants in that category. Also categories that have not received orders must be included in the result. 
+<p>
+The method <b>bestRestaurant</b> returns the name of the restaurant that has received the higher average rating. 
+
+</body>
+</html>
